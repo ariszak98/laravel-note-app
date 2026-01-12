@@ -25,17 +25,10 @@
         <!-- Actions -->
         <div class="flex gap-4">
             <a
-                href="{{ route('register') }}"
+                href="/"
                 class="bg-yellow-500 text-white px-6 py-3 rounded-xl font-medium hover:bg-yellow-600 transition"
             >
-                Get Started
-            </a>
-
-            <a
-                href="{{ route('login') }}"
-                class="bg-gray-100 text-gray-800 px-6 py-3 rounded-xl font-medium hover:bg-gray-200 transition"
-            >
-                Log in
+                Create Note
             </a>
         </div>
 
