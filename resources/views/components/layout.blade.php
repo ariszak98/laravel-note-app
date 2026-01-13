@@ -17,7 +17,7 @@
 
 <!-- Main Body -->
 <main class="w-[95vw] mx-auto px-4 py-4">
-    <div class="bg-white rounded-2xl shadow-sm w-full p-4 min-h-[85vh]">
+    <div class="bg-white rounded-2xl shadow-sm w-full p-4 min-h-[85vh] flex flex-col">
         {{ $slot }}
     </div>
 </main>
