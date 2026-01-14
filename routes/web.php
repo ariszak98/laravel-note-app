@@ -24,7 +24,10 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/notes', [NotesController::class, 'index'])->name('notes.index');
+    Route::get('/notes/create', [NotesController::class, 'create'])->name('notes.create');
+    Route::post('/notes', [NotesController::class, 'store'])->name('notes.store');
     Route::get('/notes/show', [NotesController::class, 'show'])->name('notes.show');
+    Route::get('/notes/show/{note}', [NotesController::class, 'show'])->name('notes.show');
     Route::delete('/logout', [SessionController::class, 'destroy'])->name('logout');
 });
 

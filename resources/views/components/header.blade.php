@@ -23,10 +23,10 @@
 
         @auth
             <div class="ml-auto flex items-center">
-                <span class="mr-2 font-bold text-lg italic">
+                <span class="mr-2 text-lg font-mono text-yellow-500">
                     Hello,
                 </span>
-                <span class="mr-6 font-bold text-xl">
+                <span class="mr-6 font-mono text-lg">
                     {{ auth()->user()->first_name }}
                 </span>
                 <form action="/logout" method="POST" class="mr-5">
@@ -35,7 +35,7 @@
 
                     <button
                         type="submit"
-                        class="text-yellow-500 text-lg font-semibold hover:underline hover:font-bold"
+                        class="text-yellow-500 text-lg underline font-mono hover:underline hover:font-bold"
                     >
                         Logout
                     </button>

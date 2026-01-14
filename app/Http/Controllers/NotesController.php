@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreNotesRequest;
 use App\Http\Requests\UpdateNotesRequest;
 use App\Models\Notes;
+use Illuminate\Http\Request;
 
 class NotesController extends Controller
 {
@@ -13,7 +14,8 @@ class NotesController extends Controller
      */
     public function index()
     {
-        return view('notes.index');
+        $notes = auth()->user()->notes()->latest()->get();
+        return view('notes.index', ['notes' => $notes]);
     }
 
     /**
@@ -21,15 +23,26 @@ class NotesController extends Controller
      */
     public function create()
     {
-        //
+        return view('notes.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreNotesRequest $request)
+    public function store(Request $request)
     {
-        //
+        $user = auth()->user();
+
+        $userAttributes = $request->validate([
+            'title' => 'required|string|max:255',
+            'body' => 'required|string',
+        ]);
+
+        $user->notes()->create($userAttributes);
+
+        return redirect('/notes');
+
+
     }
 
     /**
@@ -37,7 +50,8 @@ class NotesController extends Controller
      */
     public function show(Notes $notes)
     {
-        return view('notes.show');
+        $note = Notes::find(request()->route('note'));
+        return view('notes.show', ['note' => $note]);
     }
 
     /**
