@@ -6,6 +6,7 @@ use App\Http\Requests\StoreNotesRequest;
 use App\Http\Requests\UpdateNotesRequest;
 use App\Models\Notes;
 use Illuminate\Http\Request;
+use JetBrains\PhpStorm\NoReturn;
 
 class NotesController extends Controller
 {
@@ -66,9 +67,15 @@ class NotesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateNotesRequest $request, Notes $notes)
+    #[NoReturn]
+    public function update(Request $request, Notes $note)
     {
-        //
+        $note->update($request->validate([
+            'title' => 'required|string|max:255',
+            'body' => 'required|string',
+        ]));
+
+        return redirect('/notes/show/' . $note->id);
     }
 
     /**

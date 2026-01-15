@@ -9,13 +9,21 @@
                     @if($note->pinned)
                         <x-graphics.pin class="w-8 h-8 mt-1 shrink-0" />
                     @endif
-                    <x-text.title>{{ $note->title }}</x-text.title>
+                        <a href="{{ route('notes.edit', [$note, 'focus' => 'title']) }}"
+                           class="cursor-text hover:opacity-80">
+                            <x-text.title>{{ $note->title }}</x-text.title>
+                        </a>
                 </div>
                 <x-graphics.divider class="mt-5" />
             </header>
             <article class="flex-1 pt-4 ml-5 mr-5">
                 <div class="prose prose-sm max-w-none text-gray-800 leading-relaxed prose-a:text-yellow-500 prose-a:hover:underline">
-                    {{ $note->body  }}
+                    <a href="{{ route('notes.edit', [$note, 'focus' => 'body']) }}"
+                       class="block cursor-text hover:opacity-80">
+                        <div class="prose prose-sm max-w-none text-gray-800">
+                            {{ $note->body }}
+                        </div>
+                    </a>
                 </div>
             </article>
         </section>

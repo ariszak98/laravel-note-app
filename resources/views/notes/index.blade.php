@@ -74,21 +74,27 @@
                 </a>
 
                 <x-graphics.divider/>
-
+                @php $pinned = 0; @endphp
                 @foreach($notes as $note)
-                    <a href="/notes/show/{{ $note->id  }}" class="block">
+
                         @if($note->pinned)
-                            <x-notes.card-pinned :title="$note->title">
-                                {{ Str::limit($note->body, 100) }}
-                            </x-notes.card-pinned>
-                        @else
-                            <x-notes.card :title="$note->title">
-                                {{ Str::limit($note->body, 100) }}
-                            </x-notes.card>
+                            <a href="/notes/show/{{ $note->id  }}" class="block">
+                                <x-notes.card-pinned :title="$note->title">
+                                    {{ Str::limit($note->body, 100) }}
+                                </x-notes.card-pinned>
+                            </a>
+                            @php $pinned++; @endphp
                         @endif
 
-                    </a>
                 @endforeach
+
+                @if(!$pinned)
+                    <div class="flex flex-col items-center gap-2 mt-10">
+                        <x-graphics.pin class="h-6 w-6 text-gray-400 opacity-70" />
+                        <x-text.title-2>No pinned notes</x-text.title-2>
+                        <x-text.par-sm>Pin important notes to keep them here. </x-text.par-sm>
+                    </div>
+                @endif
 
             </div>
         </aside>

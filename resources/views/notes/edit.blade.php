@@ -6,7 +6,7 @@
         <section class="w-3/4 pr-6 flex flex-col">
 
             <form method="POST"
-                  action=""
+                  action="{{ route('notes.update', $note) }}"
                   class="flex flex-col flex-1 min-h-0">
 
                 @csrf
@@ -19,6 +19,7 @@
                         @endif
 
                         <input
+                            id="note-title"
                             autofocus
                             type="text"
                             name="title"
@@ -124,4 +125,32 @@
 
 
     </div>
+
+    <script>
+        (function () {
+            const focus = new URLSearchParams(window.location.search).get('focus');
+
+            let el = null;
+
+            if (focus === 'title') {
+                el = document.getElementById('note-title');
+            }
+
+            if (focus === 'body') {
+                el = document.getElementById('note-body');
+            }
+
+            if (!el) return;
+
+            requestAnimationFrame(() => {
+                el.focus();
+
+                // Move cursor to end
+                const len = el.value.length;
+                el.setSelectionRange(len, len);
+            });
+        })();
+    </script>
+
+
 </x-layout>
