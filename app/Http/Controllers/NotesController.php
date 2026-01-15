@@ -59,7 +59,8 @@ class NotesController extends Controller
      */
     public function edit(Notes $notes)
     {
-        //
+        $note = Notes::find(request()->route('note'));
+        return view('notes.edit', ['note' => $note]);
     }
 
     /**
@@ -73,8 +74,27 @@ class NotesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Notes $notes)
+    public function destroy(Notes $note)
     {
-        //
+        $note->delete();
+
+        return redirect('/notes');
     }
+
+    public function pin(Notes $note)
+    {
+        $note->pinned = true;
+        $note->save();
+
+        return redirect('/notes/show/'. $note->id);
+    }
+
+    public function unpin(Notes $note)
+    {
+        $note->pinned = false;
+        $note->save();
+
+        return redirect('/notes/show/' . $note->id);
+    }
+
 }

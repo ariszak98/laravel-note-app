@@ -8,13 +8,13 @@
         </h1>
 
         @guest()
-            <button class="mr-5 ml-auto text-yellow-500 text-lg font-semibold hover:underline hover:font-bold">
+            <button class="mr-5 ml-auto text-yellow-500 text-lg font-mono font-semibold hover:underline hover:font-bold">
                 <a href="/register">
                     Register
                 </a>
             </button>
 
-            <button class="mr-5 text-yellow-500 text-lg font-semibold hover:underline hover:font-bold">
+            <button class="mr-5 text-yellow-500 text-lg font-mono font-semibold hover:underline hover:font-bold">
                 <a href="/login">
                     Login
                 </a>

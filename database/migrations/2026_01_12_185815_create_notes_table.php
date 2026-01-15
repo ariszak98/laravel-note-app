@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->boolean("pinned")->default(false);
             $table->string('title');
             $table->text('body');
             $table->timestamps();

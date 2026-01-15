@@ -4,20 +4,67 @@
 
 
         <section class="w-3/4 pr-6 flex flex-col">
-            <header class="pt-2 pb-5 ml-5">
-                <div class="flex items-start gap-2 mb-5">
-                    @if($note->pinned)
-                        <x-graphics.pin class="w-8 h-8 mt-1 shrink-0" />
-                    @endif
-                    <x-text.title>{{ $note->title }}</x-text.title>
-                </div>
-                <x-graphics.divider class="mt-5" />
-            </header>
-            <article class="flex-1 pt-4 ml-5 mr-5">
-                <div class="prose prose-sm max-w-none text-gray-800 leading-relaxed prose-a:text-yellow-500 prose-a:hover:underline">
-                    {{ $note->body  }}
-                </div>
-            </article>
+
+            <form method="POST"
+                  action=""
+                  class="flex flex-col flex-1 min-h-0">
+
+                @csrf
+                @method('PATCH')
+
+                <header class="pt-2 pb-5 ml-5 shrink-0">
+                    <div class="flex items-start gap-2 mb-5">
+                        @if($note->pinned)
+                            <x-graphics.pin class="w-8 h-8 mt-1 shrink-0" />
+                        @endif
+
+                        <input
+                            autofocus
+                            type="text"
+                            name="title"
+                            value="{{ old('title', $note->title) }}"
+                            class="w-full bg-transparent text-2xl font-semibold text-gray-900 border-0 p-0 focus:outline-none focus:ring-0"
+                            placeholder="Note title"
+                        />
+                    </div>
+
+                    <x-graphics.divider class="mt-5" />
+                </header>
+
+                <article class="pt-4 ml-5 mr-5">
+        <textarea
+            id="note-body"
+            name="body"
+            rows="6"
+            class="
+                w-full resize-none overflow-hidden
+                bg-transparent
+                text-sm text-gray-800 leading-relaxed
+                border-0 p-0
+                focus:outline-none focus:ring-0
+            "
+            placeholder="Start writing…"
+        >{{ old('body', $note->body) }}</textarea>
+                    <x-forms.yellow-button compact class="mt-10">Submit changes</x-forms.yellow-button>
+
+                </article>
+            </form>
+
+            <script>
+                (function () {
+                    const ta = document.getElementById('note-body');
+                    if (!ta) return;
+
+                    const autoGrow = () => {
+                        ta.style.height = 'auto';
+                        ta.style.height = ta.scrollHeight + 'px';
+                    };
+
+                    autoGrow();
+                    ta.addEventListener('input', autoGrow);
+                })();
+            </script>
+
         </section>
 
 
@@ -41,7 +88,6 @@
 
                 <x-notes.card-show-empty text="QUICK ACTIONS">
                     <div class="mt-3 space-y-2">
-
                         @if($note->pinned)
                             <form action="/notes/{{ $note->id }}/unpin" method="POST">
                                 @csrf
@@ -54,17 +100,13 @@
                             </form>
                         @endif
 
-                        <form action="/notes/{{ $note->id }}/edit" method="GET">
-                            @csrf
-                            <x-notes.card-button>Edit note</x-notes.card-button>
-                        </form>
+                        <x-notes.card-button>Edit note</x-notes.card-button>
 
                         <form action="/notes/{{ $note->id }}" method="POST">
                             @csrf
                             @method('DELETE')
                         <x-notes.card-button class="text-red-600">Delete</x-notes.card-button>
                         </form>
-
                     </div>
                 </x-notes.card-show-empty>
 

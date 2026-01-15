@@ -15,13 +15,38 @@
                 <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                     @forelse ($notes as $note)
                         <a href="/notes/show/{{ $note->id  }}" class="block">
-                            <x-notes.card :title="$note->title">
-                                {{ $note->body }}
-                            </x-notes.card>
+                            @if($note->pinned)
+                                <x-notes.card-pinned :title="$note->title">
+                                    {{ Str::limit($note->body, 100) }}
+                                </x-notes.card-pinned>
+                            @else
+                                <x-notes.card :title="$note->title">
+                                    {{ Str::limit($note->body, 100) }}
+                                </x-notes.card>
+                            @endif
+
                         </a>
                     @empty
-                        <div class="col-span-full rounded-xl border border-gray-200 bg-gray-50 p-6 text-center text-gray-600">
-                            No notes yet. Create your first one ✍️
+                        <div class="col-span-full flex flex-1 items-center justify-center py-16">
+                            <div class="flex max-w-md flex-col items-center text-center space-y-4">
+
+                                <x-icon class="h-6 w-6" />
+
+                                <x-text.title class="mt-2">
+                                    Notes
+                                </x-text.title>
+
+                                <x-text.subtitle class="text-gray-500">
+                                    A simple and elegant place to write, organize, and keep your thoughts — inspired by iOS Notes.
+                                </x-text.subtitle>
+
+                                <div class="pt-4">
+                                    <x-buttons.yellow-button href="{{ route('notes.create') }}">
+                                        Create your first note
+                                    </x-buttons.yellow-button>
+                                </div>
+
+                            </div>
                         </div>
                     @endforelse
                 </div>
@@ -52,9 +77,16 @@
 
                 @foreach($notes as $note)
                     <a href="/notes/show/{{ $note->id  }}" class="block">
-                        <x-notes.card-pinned :title="$note->title">
-                            {{ Str::limit($note->body, 100) }}
-                        </x-notes.card-pinned>
+                        @if($note->pinned)
+                            <x-notes.card-pinned :title="$note->title">
+                                {{ Str::limit($note->body, 100) }}
+                            </x-notes.card-pinned>
+                        @else
+                            <x-notes.card :title="$note->title">
+                                {{ Str::limit($note->body, 100) }}
+                            </x-notes.card>
+                        @endif
+
                     </a>
                 @endforeach
 
