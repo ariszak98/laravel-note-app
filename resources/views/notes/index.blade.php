@@ -74,27 +74,23 @@
                 </a>
 
                 <x-graphics.divider/>
-                @php $pinned = 0; @endphp
-                @foreach($notes as $note)
 
-                        @if($note->pinned)
-                            <a href="/notes/show/{{ $note->id  }}" class="block">
-                                <x-notes.card-pinned :title="$note->title">
-                                    {{ Str::limit($note->body, 100) }}
-                                </x-notes.card-pinned>
-                            </a>
-                            @php $pinned++; @endphp
-                        @endif
-
-                @endforeach
-
-                @if(!$pinned)
+                @if($pinned_notes != null && count($pinned_notes) > 0)
+                    @foreach($pinned_notes as $pinned_note)
+                        <a href="/notes/show/{{ $pinned_note->id  }}" class="block">
+                            <x-notes.card-pinned :title="$pinned_note->title">
+                                {{ Str::limit($pinned_note->body, 100) }}
+                            </x-notes.card-pinned>
+                        </a>
+                    @endforeach
+                @else
                     <div class="flex flex-col items-center gap-2 mt-10">
                         <x-graphics.pin class="h-6 w-6 text-gray-400 opacity-70" />
                         <x-text.title-2>No pinned notes</x-text.title-2>
                         <x-text.par-sm>Pin important notes to keep them here. </x-text.par-sm>
                     </div>
                 @endif
+
 
             </div>
         </aside>
@@ -125,10 +121,10 @@
 
         <x-icon />
 
-        <x-text.title>Notes</x-text.title>
+        <x-text.title>Note</x-text.title>
 
         <x-text.subtitle>
-            A simple and elegant place to write, organize, and keep your thoughts — inspired by iOS Notes.
+            A simple and elegant place to write, organize, and keep your thoughts — inspired by iOS Note.
         </x-text.subtitle>
 
         <div class="flex gap-4">

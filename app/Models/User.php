@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Prompts\Note;
+use App\Models\Note;
 
 class User extends Authenticatable
 {
@@ -52,6 +52,6 @@ class User extends Authenticatable
 
     public function notes(): hasMany
     {
-        return $this->hasMany(Notes::class);
+        return $this->hasMany(Note::class);
     }
 }

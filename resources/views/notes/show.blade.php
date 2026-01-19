@@ -24,6 +24,22 @@
                             {{ $note->body }}
                         </div>
                     </a>
+
+                    {{-- Divider --}}
+                    <x-graphics.divider class="mt-20" />
+
+                    {{-- Tag area --}}
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="text-yellow-500 font-mono">Tags: </span>
+                        @if($tags->count() > 0)
+                            @foreach($tags as $tag)
+                                <x-notes.tag-link :link="$tag->slug">{{ $tag->name }}</x-notes.tag-link>
+                            @endforeach
+                        @else
+                            <span class="font-mono">No tags found.</span>
+                        @endif
+                    </div>
+
                 </div>
             </article>
         </section>
@@ -36,15 +52,19 @@
             <div class="space-y-3">
 
                 <x-notes.card-show text="CREATED" subtitle="{{ $note->created_at->format('M d, Y') }}" />
-                <x-notes.card-show text="UPDATED" subtitle="{{ $note->created_at->format('M d, Y, H:h') }}" />
+                <x-notes.card-show text="UPDATED" subtitle="{{ $note->updated_at->format('M d, Y, H:i') }}" />
 
                 <x-notes.card-show-empty text="Tags">
                     <div class="mt-2 flex flex-wrap gap-2">
-                        <x-notes.tag>Work</x-notes.tag>
-                        <x-notes.tag>Ideas</x-notes.tag>
-                        <x-notes.tag>Personal</x-notes.tag>
+                        @if($tags->count() > 0)
+                            @foreach($tags as $tag)
+                                <x-notes.tag-link :link="$tag->slug">{{ $tag->name }}</x-notes.tag-link>
+                            @endforeach
+                        @else
+                            <span class="font-mono">No tags found.</span>
+                        @endif
                     </div>
-                    <x-text.par-sm class="mt-3">Add tags to organize notes faster.</x-text.par-sm>
+{{--                    <x-text.par-sm class="mt-3">Add tags to organize notes faster.</x-text.par-sm>--}}
                 </x-notes.card-show-empty>
 
                 <x-notes.card-show-empty text="QUICK ACTIONS">

@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreNotesRequest;
 use App\Http\Requests\UpdateNotesRequest;
-use App\Models\Notes;
+use App\Models\Note;
+use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use JetBrains\PhpStorm\NoReturn;
 
 class NotesController extends Controller
@@ -16,7 +19,9 @@ class NotesController extends Controller
     public function index()
     {
         $notes = auth()->user()->notes()->latest()->get();
-        return view('notes.index', ['notes' => $notes]);
+        $pinned_notes = $notes->where('pinned', true) ?? false;
+
+        return view('notes.index', ['notes' => $notes, 'pinned_notes' => $pinned_notes]);
     }
 
     /**
@@ -37,43 +42,84 @@ class NotesController extends Controller
         $userAttributes = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string',
+            'tags' => 'nullable'
         ]);
 
-        $user->notes()->create($userAttributes);
+        $note = $user->notes()->create(Arr::except($userAttributes, 'tags'));
 
-        return redirect('/notes');
+        $rawTags = $userAttributes['tags'] ?? [];
 
+        $tagNames = collect(is_array($rawTags) ? $rawTags : explode(',', $rawTags))
+            ->map(fn ($t) => trim($t))
+            ->filter()
+            ->unique()
+            ->take(20);
+
+
+        $tagIds = $tagNames->map(function ($name) {
+            return Tag::firstOrCreate(
+                ['slug' => Str::slug($name)],
+                ['name' => $name]
+            )->id;
+        });
+
+        $note->tags()->sync($tagIds->all());
+
+        return redirect()->route('notes.index');
 
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Notes $notes)
+    public function show(Note $notes)
     {
-        $note = Notes::find(request()->route('note'));
-        return view('notes.show', ['note' => $note]);
+        $note = Note::find(request()->route('note'));
+        $tags = $note->tags;
+
+        return view('notes.show', ['note' => $note, 'tags' => $tags]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Notes $notes)
+    public function edit(Note $note)
     {
-        $note = Notes::find(request()->route('note'));
-        return view('notes.edit', ['note' => $note]);
+        $tags = $note->tags;
+        $text_tags = $tags->pluck('name')->implode(', ');
+        return view('notes.edit', ['note' => $note, 'tags' => $tags, 'text_tags' => $text_tags]);
     }
 
     /**
      * Update the specified resource in storage.
      */
     #[NoReturn]
-    public function update(Request $request, Notes $note)
+    public function update(Request $request, Note $note)
     {
-        $note->update($request->validate([
+        $data = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string',
-        ]));
+            'tags' => 'nullable'
+        ]);
+
+        $note->update(Arr::except($data, 'tags'));
+
+        $rawTags = $data['tags'] ?? [];
+
+        $tagNames = collect(is_array($rawTags) ? $rawTags : explode(',', $rawTags))
+            ->map(fn ($t) => trim($t))
+            ->filter()
+            ->unique()
+            ->take(20);
+
+        $tagIds = $tagNames->map(function ($name) {
+            return Tag::firstOrCreate(
+                ['slug' => Str::slug($name)],
+                ['name' => $name]
+            )->id;
+        });
+
+        $note->tags()->sync($tagIds->all());
 
         return redirect('/notes/show/' . $note->id);
     }
@@ -81,14 +127,14 @@ class NotesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Notes $note)
+    public function destroy(Note $note)
     {
         $note->delete();
 
         return redirect('/notes');
     }
 
-    public function pin(Notes $note)
+    public function pin(Note $note)
     {
         $note->pinned = true;
         $note->save();
@@ -96,7 +142,7 @@ class NotesController extends Controller
         return redirect('/notes/show/'. $note->id);
     }
 
-    public function unpin(Notes $note)
+    public function unpin(Note $note)
     {
         $note->pinned = false;
         $note->save();

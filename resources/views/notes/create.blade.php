@@ -33,6 +33,16 @@
                 >{{ old('body') }}</textarea>
             </div>
 
+            <div>
+                <x-forms.label>Tags</x-forms.label>
+                <x-forms.input
+                    name="tags"
+                    value="{{ old('tags') }}"
+                    required
+                    placeholder="Ideas, Personal, Work, etc."
+                />
+            </div>
+
 
             <x-forms.yellow-button>
                 Save note

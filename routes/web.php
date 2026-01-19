@@ -23,15 +23,33 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+
+    /**
+     * Logout Routes
+     */
+    Route::delete('/logout', [SessionController::class, 'destroy'])->name('logout');
+
+    /**
+     * Pin - Unpin Note Routes
+     */
+    Route::post('/notes/{note}/pin', [NotesController::class, 'pin'])->name('notes.pin');
+    Route::post('/notes/{note}/unpin', [NotesController::class, 'unpin'])->name('notes.unpin');
+
+    /**
+     * Note Resource Routes
+     */
     Route::get('/notes', [NotesController::class, 'index'])->name('notes.index');
     Route::get('/notes/create', [NotesController::class, 'create'])->name('notes.create');
     Route::post('/notes', [NotesController::class, 'store'])->name('notes.store');
-    Route::delete('/notes/{note}', [NotesController::class, 'destroy'])->name('notes.destroy');
     Route::get('/notes/show/{note}', [NotesController::class, 'show'])->name('notes.show');
     Route::get('/notes/{note}/edit', [NotesController::class, 'edit'])->name('notes.edit');
     Route::patch('/notes/{note}', [NotesController::class, 'update'])->name('notes.update');
-    Route::post('/notes/{note}/pin', [NotesController::class, 'pin'])->name('notes.pin');
-    Route::post('/notes/{note}/unpin', [NotesController::class, 'unpin'])->name('notes.unpin');
-    Route::delete('/logout', [SessionController::class, 'destroy'])->name('logout');
+    Route::delete('/notes/{note}', [NotesController::class, 'destroy'])->name('notes.destroy');
+
+    /**
+     * Tag Resource Routes
+     */
+
+
 });
 
