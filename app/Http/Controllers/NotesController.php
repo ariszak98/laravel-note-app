@@ -16,12 +16,39 @@ class NotesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $notes = auth()->user()->notes()->latest()->get();
-        $pinned_notes = $notes->where('pinned', true) ?? false;
+        $data = $request->validate([
+            'search' => ['nullable', 'string', 'max:255'],
+        ]);
 
-        return view('notes.index', ['notes' => $notes, 'pinned_notes' => $pinned_notes]);
+        $search = $data['search'] ?? null;
+
+        $baseQuery = auth()->user()->notes();
+
+        $applySearch = function ($q) use ($search) {
+            if (!$search) return;
+
+            $q->where(function ($qq) use ($search) {
+                $qq->where('title', 'like', "%{$search}%")
+                    ->orWhere('body', 'like', "%{$search}%")
+                    ->orWhereHas('tags', function ($tagQuery) use ($search) {
+                        $tagQuery->where('name', 'like', "%{$search}%");
+                    });
+            });
+        };
+
+        $pinned_notes = (clone $baseQuery)
+            ->where('pinned', true)
+            ->latest()
+            ->get();
+
+        $notes = (clone $baseQuery)
+            ->tap($applySearch)
+            ->latest()
+            ->get();
+
+        return view('notes.index', compact('notes', 'pinned_notes', 'search'));
     }
 
     /**

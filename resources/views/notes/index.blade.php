@@ -64,7 +64,7 @@
             <div class="space-y-4">
 
                 <div class="mb-2">
-                    <form action="" method="GET">
+                    <form action="{{ route('notes.index') }}" method="GET">
                         <x-forms.input-search />
                     </form>
                 </div>
