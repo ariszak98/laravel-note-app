@@ -39,7 +39,6 @@
             <x-forms.yellow-button>Log in</x-forms.yellow-button>
 
 
-            <!-- Footer -->
             <p class="text-center text-sm text-gray-500">
                 Don’t have an account?
                 <a href="/register" class="text-yellow-500 font-medium hover:underline">

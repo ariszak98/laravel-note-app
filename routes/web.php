@@ -15,6 +15,10 @@ Route::get('/', function () {
 
 
 
+
+/**
+ * Guest Routes
+ */
 Route::middleware('guest')->group(function () {
     Route::get('/login', [SessionController::class, 'create'])->name('login');
     Route::post('/login', [SessionController::class, 'store']);
@@ -22,6 +26,12 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [RegisteredUserController::class, 'store']);
 });
 
+
+
+
+/**
+ * Authenticated Routes
+ */
 Route::middleware('auth')->group(function () {
 
     /**
@@ -45,10 +55,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/notes/{note}/edit', [NotesController::class, 'edit'])->name('notes.edit');
     Route::patch('/notes/{note}', [NotesController::class, 'update'])->name('notes.update');
     Route::delete('/notes/{note}', [NotesController::class, 'destroy'])->name('notes.destroy');
-
-    /**
-     * Tag Resource Routes
-     */
 
 
 });

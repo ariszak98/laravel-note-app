@@ -73,7 +73,6 @@
             <x-forms.yellow-button>Create Account</x-forms.yellow-button>
 
 
-            <!-- Footer -->
             <p class="text-center text-sm text-gray-500">
                 Already have an account?
                 <a href="{{ route('login') }}" class="text-yellow-500 font-medium hover:underline">

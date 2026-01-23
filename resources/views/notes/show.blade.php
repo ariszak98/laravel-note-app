@@ -96,13 +96,6 @@
                     </div>
                 </x-notes.card-show-empty>
 
-                <div class="pt-1">
-                    <x-text.par-sm class="text-yellow-500 font-semibold">Notes</x-text.par-sm>
-                    <x-text.par-sm>
-                        Add tags to organize notes faster.Add tags to organize notes faster.Add tags to organize notes faster.Add tags to organize notes faster.Add tags to organize notes faster.
-                    </x-text.par-sm>
-                </div>
-
             </div>
         </aside>
 
